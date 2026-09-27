@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { SITE_CONFIG } from "../data/config";
 import { useReducedMotionSafe } from "../hooks/useReducedMotionSafe";
+import ScrollReveal from "./ScrollReveal";
 
 export function SectionPesan() {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -19,18 +20,24 @@ export function SectionPesan() {
         return;
       }
 
-      gsap.set(lines, { opacity: 0, y: 20 });
-      gsap.to(lines, {
-        opacity: 1,
-        y: 0,
-        duration: 0.7,
-        stagger: 0.14,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: scope,
-          start: "top 78%",
-          once: true
-        }
+      gsap.set(lines, { opacity: 0, y: 28, filter: "blur(10px)" });
+
+      lines.forEach((line, index) => {
+        gsap.to(line, {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: 0.9,
+          ease: "power2.out",
+          delay: index * 0.12,
+          scrollTrigger: {
+            trigger: line,
+            start: "top 85%",
+            end: "top 55%",
+            scrub: 0.8,
+            once: true
+          }
+        });
       });
     }, scope);
 
@@ -66,7 +73,15 @@ export function SectionPesan() {
       <div className="mx-auto max-w-3xl text-center">
         <p className="section-kicker">Pesan ucapan</p>
 
-        <h2 className="section-title mt-3">Hari ini tentang kamu.</h2>
+        <ScrollReveal
+          baseOpacity={0.12}
+          enableBlur={true}
+          baseRotation={3}
+          blurStrength={5}
+          containerClassName="mt-3 block"
+        >
+          <h2 className="section-title">Hari ini tentang kamu.</h2>
+        </ScrollReveal>
 
         <div className="mt-10 space-y-6">
           {messages.map((line, index) => (

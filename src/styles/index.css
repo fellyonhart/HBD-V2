@@ -43,14 +43,43 @@ body {
   background: var(--color-navy);
   color: var(--color-cream);
   font-family: var(--font-body);
+  background-image:
+    radial-gradient(circle at top, rgba(245, 197, 66, 0.06), transparent 35%),
+    radial-gradient(
+      circle at 80% 15%,
+      rgba(255, 143, 177, 0.05),
+      transparent 28%
+    );
 }
 button,
 a {
   -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease,
+    opacity 180ms ease,
+    filter 180ms ease;
 }
 img,
 video {
   max-width: 100%;
+  display: block;
+}
+
+.scroll-reveal {
+  margin: 0;
+}
+
+.scroll-reveal-text {
+  display: inline-block;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.word {
+  display: inline-block;
+  white-space: pre-wrap;
 }
 
 ::selection {
@@ -66,15 +95,90 @@ video {
   background:
     radial-gradient(
       circle at 20% 15%,
-      rgba(245, 197, 66, 0.13),
-      transparent 24%
+      rgba(245, 197, 66, 0.12),
+      transparent 20%
     ),
     radial-gradient(
       circle at 78% 22%,
-      rgba(255, 143, 177, 0.13),
-      transparent 30%
+      rgba(255, 143, 177, 0.12),
+      transparent 26%
     ),
-    radial-gradient(circle at 52% 78%, rgba(80, 89, 180, 0.1), transparent 30%);
+    radial-gradient(circle at 52% 78%, rgba(80, 89, 180, 0.08), transparent 30%);
+  filter: saturate(1.1);
+  opacity: 0.9;
+}
+
+.hero-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(245, 197, 66, 0.7);
+  box-shadow: 0 0 14px rgba(245, 197, 66, 0.35);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.hero-scroll-cue {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(201, 194, 176, 0.8);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+.hero-scroll-cue::before {
+  content: "";
+  width: 18px;
+  height: 28px;
+  border: 1px solid rgba(245, 197, 66, 0.5);
+  border-radius: 999px;
+  display: block;
+  position: relative;
+  animation: scrollCue 1.7s ease-in-out infinite;
+}
+
+.hero-scroll-cue::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  width: 4px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(245, 197, 66, 0.9);
+  transform: translateX(-50%);
+  animation: scrollCueDot 1.7s ease-in-out infinite;
+}
+
+@keyframes scrollCue {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(4px);
+    opacity: 1;
+  }
+}
+
+@keyframes scrollCueDot {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate(-50%, 4px);
+    opacity: 1;
+  }
 }
 
 .tile-stage {
@@ -139,6 +243,82 @@ video {
   to {
     transform: translateX(-50%) scale(1.08);
     opacity: 1;
+  }
+}
+
+@keyframes heroFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate3d(0, -8px, 0) scale(1.2);
+    opacity: 0.9;
+  }
+}
+
+@keyframes photoReveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.photo-card {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  animation: photoReveal 480ms ease-out both;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .photo-card {
+    transition:
+      transform 240ms ease,
+      border-color 220ms ease,
+      box-shadow 220ms ease;
+  }
+
+  .photo-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(245, 197, 66, 0.4);
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.18);
+  }
+}
+
+@keyframes heroFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate3d(0, -8px, 0) scale(1.2);
+    opacity: 0.9;
+  }
+}
+
+.photo-card {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .photo-card {
+    transition:
+      transform 240ms ease,
+      border-color 220ms ease,
+      box-shadow 220ms ease;
+  }
+
+  .photo-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(245, 197, 66, 0.4);
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.18);
   }
 }
 
@@ -589,6 +769,7 @@ video {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.05),
     0 28px 70px rgba(0, 0, 0, 0.22);
+  transform: translateZ(0);
 }
 
 .bottle-letter-orbit {
@@ -649,6 +830,18 @@ video {
   background: transparent;
   cursor: pointer;
   isolation: isolate;
+  animation: bottleFloat 4.2s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+@keyframes bottleFloat {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
 }
 
 .bottle-shadow {
@@ -739,6 +932,20 @@ video {
     inset 14px 0 24px rgba(255, 255, 255, 0.05),
     inset -12px -18px 30px rgba(6, 30, 45, 0.28),
     0 28px 55px rgba(0, 0, 0, 0.3);
+}
+
+.bottle-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    118deg,
+    rgba(255, 255, 255, 0.18),
+    transparent 18%,
+    transparent 62%,
+    rgba(255, 255, 255, 0.05)
+  );
+  pointer-events: none;
 }
 
 .bottle-glass::before {
@@ -920,6 +1127,21 @@ video {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: rgba(201, 194, 176, 0.62);
+}
+
+.bottle-button:hover .bottle-glass,
+.bottle-button:focus-visible .bottle-glass {
+  filter: brightness(1.05);
+}
+
+.bottle-button:active {
+  transform: scale(0.985);
+}
+
+@media (max-width: 640px) {
+  .bottle-button {
+    animation: none;
+  }
 }
 
 @media (max-width: 640px) {

@@ -27,8 +27,15 @@ export function VideoSection() {
     []
   );
 
-  const selectedVideo =
-    videos.find((video) => video.id === selectedId) ?? videos[0];
+  const selectedIndex = videos.findIndex((video) => video.id === selectedId);
+  const currentIndex = selectedIndex >= 0 ? selectedIndex : 0;
+  const selectedVideo = videos[currentIndex] ?? videos[0];
+
+  const goToVideo = (direction: 1 | -1) => {
+    const nextIndex =
+      (currentIndex + direction + videos.length) % videos.length;
+    setSelectedId(videos[nextIndex].id);
+  };
 
   return (
     <section id="video" className="section-shell px-5 py-24 sm:py-32">
@@ -48,8 +55,26 @@ export function VideoSection() {
             </div>
           </div>
         ) : (
-          <div className="space-y-5">
-            <div className="overflow-hidden rounded-3xl border border-gold/20 bg-navy-deep shadow-[0_30px_80px_rgba(0,0,0,.22)]">
+          <div className="space-y-4">
+            <div className="relative overflow-hidden rounded-3xl border border-gold/20 bg-navy-deep shadow-[0_30px_80px_rgba(0,0,0,.22)]">
+              <button
+                type="button"
+                aria-label="Video sebelumnya"
+                onClick={() => goToVideo(-1)}
+                className="absolute left-3 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-navy/70 text-lg text-cream backdrop-blur-sm transition hover:border-gold/60 hover:text-gold"
+              >
+                ‹
+              </button>
+
+              <button
+                type="button"
+                aria-label="Video berikutnya"
+                onClick={() => goToVideo(1)}
+                className="absolute right-3 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-navy/70 text-lg text-cream backdrop-blur-sm transition hover:border-gold/60 hover:text-gold"
+              >
+                ›
+              </button>
+
               <video
                 key={selectedVideo.id}
                 width={1280}
@@ -62,27 +87,6 @@ export function VideoSection() {
                 onError={() => setMissing(true)}
                 aria-label={selectedVideo.label}
               />
-            </div>
-
-            <div className="flex flex-wrap gap-3">
-              {videos.map((video) => {
-                const isActive = video.id === selectedVideo.id;
-
-                return (
-                  <button
-                    key={video.id}
-                    type="button"
-                    onClick={() => setSelectedId(video.id)}
-                    className={`rounded-full border px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] transition ${
-                      isActive
-                        ? "border-gold bg-gold text-navy"
-                        : "border-white/15 bg-navy-deep text-cream-muted hover:border-gold/50 hover:text-cream"
-                    }`}
-                  >
-                    {video.label}
-                  </button>
-                );
-              })}
             </div>
           </div>
         )}
